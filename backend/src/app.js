@@ -13,7 +13,24 @@ const users = require("./routes/users");
 
 // error handler
 onerror(app);
-
+// 允许服务端跨域
+app.use(
+  cors({
+    origin: "http://localhost:8080", // 直接指定，不动态判断
+    credentials: true,
+  })
+);
+// session配置
+app.keys = ["e-shop-full-stack-secret"];
+app.use(
+  session({
+    cookie: {
+      path: "/",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    },
+  })
+);
 // middlewares
 app.use(
   bodyparser({
