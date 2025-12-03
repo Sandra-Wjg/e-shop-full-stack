@@ -13,8 +13,17 @@ async function getAddressById(id) {
   const address = await Address.findById(id);
   return address;
 }
+async function updateAddress(id, username, data) {
+  const newAddress = await Address.findOneAndUpdate(
+    { _id: id, username },
+    { username, ...data },
+    { new: true }
+  );
+  return newAddress;
+}
 module.exports = {
   createAddress,
   getAddressList,
   getAddressById,
+  updateAddress,
 };

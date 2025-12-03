@@ -3,6 +3,7 @@ const {
   createAddress,
   getAddressList,
   getAddressById,
+  updateAddress,
 } = require("../controller/address");
 const { SuccessModel, ErrorModel } = require("../res-model/index");
 const loginCheck = require("../middleware/loginCheck");
@@ -42,5 +43,16 @@ router.get("/:id", loginCheck, async (ctx, next) => {
   }
 });
 // 更新收货地址
+router.patch("/:id", loginCheck, async (ctx, next) => {
+  const id = ctx.params.id;
+  const userInfo = ctx.session.userInfo;
+  const data = ctx.request.body;
+  try {
+    const newAddress = await updateAddress(id, userInfo.username, data);
+    ctx.body = new SuccessModel(newAddress);
+  } catch (ex) {
+    ctx.body = new ErrorModel(10007, `更新收货地址失败`);
+  }
+});
 
 module.exports = router;
